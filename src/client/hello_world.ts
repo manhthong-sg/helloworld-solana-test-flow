@@ -201,21 +201,21 @@ export async function checkProgram(): Promise<void> {
 
 
 function createIncrementInstruction():Buffer{
-  const layout=BufferLayout.struct([BufferLayout.u8("intruction")]);
+  const layout=BufferLayout.struct([BufferLayout.u8("instruction")]);
   const data=Buffer.alloc(layout.span);
   layout.encode({instruction: 0}, data);
   return data;
 }
 function createDecrementInstruction():Buffer{
-  const layout=BufferLayout.struct([BufferLayout.u8("intruction")]);
+  const layout=BufferLayout.struct([BufferLayout.u8("instruction")]);
   const data=Buffer.alloc(layout.span);
   layout.encode({instruction: 1}, data);
   return data;
 }
 function createSetInstruction():Buffer{
-  const layout=BufferLayout.struct([BufferLayout.u8("intruction"), BufferLayout.u32('value')]);
+  const layout=BufferLayout.struct([BufferLayout.u8("instruction"), BufferLayout.u32('value')]);
   const data=Buffer.alloc(layout.span);
-  layout.encode({instruction: 2}, data);
+  layout.encode({instruction: 2, value: 100}, data);
   return data;
 }
 
@@ -227,7 +227,7 @@ export async function sayHello(): Promise<void> {
   const instruction = new TransactionInstruction({
     keys: [{pubkey: greetedPubkey, isSigner: false, isWritable: true}], //la account creator
     programId, //address contract SM
-    data: createIncrementInstruction(), // All instructions are hellos
+    data: createSetInstruction(), // All instructions are hellos
   });
   await sendAndConfirmTransaction(
     connection,
